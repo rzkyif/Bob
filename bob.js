@@ -28,7 +28,7 @@ app.post('/callback', line.middleware(config), (req, res) => {
 
 function refreshModules() {
   var files = fs.readdirSync(config.pluginDirectory).forEach((file) => {
-    var pluginPath = path.join(config.pluginDirectory, file)
+    var pluginPath = './' + path.join(config.pluginDirectory, file)
     eventHandlers.push(require(pluginPath));
     delete require.cache[require.resolve(pluginPath)];
   })
