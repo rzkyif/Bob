@@ -55,7 +55,7 @@ function handleEvent(event) {
   }
 
   if (finalReply) {
-    return client.replyMessage(event.replyToken, result);
+    return client.replyMessage(event.replyToken, finalReply);
   } else {
     return Promise.resolve(null);
   }
