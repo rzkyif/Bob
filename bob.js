@@ -73,7 +73,7 @@ function handleEvent(event) {
   };
 
   // start processing
-  var finalReply = null;
+  var finalReply = [];
   if (input[0].startsWith('.') && command === 'op') {
     // op command, to register admin
     var reply;
@@ -83,7 +83,7 @@ function handleEvent(event) {
       adminId = source.userId;
       reply = 'New admin registered!';
     }
-    finalReply = { type: 'text', text: reply };
+    finalReply = [{ type: 'text', text: reply }];
   } else if (input[0].startsWith('.') && command === 'refresh') {
     // refresh command, to reload modules
     var reply;
@@ -93,7 +93,7 @@ function handleEvent(event) {
       reloadModules();
       reply = 'New admin registered!';
     }
-    finalReply = { type: 'text', text: reply };
+    finalReply = [{ type: 'text', text: reply }];
   } else if (input[0].startsWith('.') && command === 'help') {
     // help function, to check documentation
     reply = "";
@@ -110,7 +110,7 @@ function handleEvent(event) {
       reply = "Available commands:\n";
       reply += commands.join(', ');
     }
-    finalReply = { type: 'text', text: reply };
+    finalReply = [{ type: 'text', text: reply }];
   } else {
     // everything else goes here
     for (var i = 0; i < messageHandlers.length; i++) {
@@ -137,17 +137,19 @@ function handleEvent(event) {
       info.time = event.timestamp;
       
       // process with handler
-      const {reply, final, lock} = messageHandlers[i].handleMessage(info, source);
-      if (final && reply) {
-        finalReply = reply;
-        break;
-      }
+      const {replies, final, lock} = messageHandlers[i].handleMessage(info, source);
       if (lock !== undefined) {
         if (lock === true) {
           locks[source.userId] = i;
         } else {
           delete locks[source.userId];
         }
+      }
+      if (replies.length + finalReply.length < 5) {
+        finalReply.push(...replies);
+      }
+      if (final || finalReply.length >= 5) {
+        break;
       }
     }
   }
