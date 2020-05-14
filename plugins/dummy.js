@@ -7,7 +7,7 @@ const admin = false;
 
 // handler function
 function handleMessage(info, source) {
-  const reply = { type: 'text', text: 'Command: '+info.command+'\nArgs: '+info.args.join(' ') };
+  const reply = { type: 'text', text: 'Command: '+info.command+'\nArgs: '+info.args.join(', ') };
   return { reply: reply, final: true };
 }
 
