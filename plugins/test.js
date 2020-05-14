@@ -8,9 +8,9 @@ const admin = false;
 // handler function
 function handleMessage(info, source) {
   let text = 'Command: ' + info.command;
-  text += '\n\nArguments\n'
+  text += '\n\nArguments'
   info.args.forEach((arg, i) => {
-    text += i + ':\n' + arg;
+    text += '\n' + i + ':\n' + arg;
   });
   const replies = [{ type: 'text', text: text }];
   return { replies: replies, final: true };
