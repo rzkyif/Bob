@@ -66,7 +66,7 @@ function handleEvent(event) {
   }
   const source = { 
     type: event.source.type, 
-    placeId: (sourceType === 'group' ? event.source.groupId : (sourceType === 'room' ? event.source.roomId : null)), 
+    placeId: (event.source.type === 'group' ? event.source.groupId : (event.source.type === 'room' ? event.source.roomId : null)), 
     userId: event.source.userId 
   };
 
