@@ -61,7 +61,7 @@ function handleEvent(event) {
 
   // extract event information
   const input = event.message.text.slice(1).match(/(?:[^\s"]+|"[^"]*")+/g);
-  const command = input[0].slice(1).toLowerCase();
+  const command = input[0].toLowerCase();
   var args = null;
   if (input.length > 1) {
     args = input.slice(1);
@@ -71,9 +71,6 @@ function handleEvent(event) {
     placeId: (event.source.type === 'group' ? event.source.groupId : (event.source.type === 'room' ? event.source.roomId : null)), 
     userId: event.source.userId 
   };
-  console.log('Received:')
-  console.log(command);
-  console.log(args);
 
   // start processing
   var finalReply = null;
@@ -158,8 +155,6 @@ function handleEvent(event) {
 
   // return the final reply
   if (finalReply) {
-    console.log('Sending reply: ');
-    console.log(finalReply);
     return client.replyMessage(event.replyToken, finalReply);
   } else {
     return Promise.resolve(null);
