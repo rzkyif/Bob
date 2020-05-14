@@ -1,32 +1,39 @@
 // handler information
-const command = 'eval'; // command handler
-const alias = ['js', 'javascript', 'e'];
-const syntax = 'eval [javascript code]'
+const command = 'evaluate'; // command handler
+const alias = ['js', 'javascript', 'e', 'eval'];
+const syntax = 'evaluate [javascript code]'
 const description = 'Compiles the inputted Javascript code with `safe-eval` and displays the returned value.';
 const admin = false;
 
 // library requirements
 const safeEval = require('safe-eval');
 
+// constants
+const codeTimeout = 10000;
+
 // handler function
 function handleMessage(info, source) {
-  var context = {
-    cout: null, 
-    print: (x) => {if (context.cout) {context.cout += String(x);} else {context.cout = String(x);}},
-    println: (x) => context.print(String(x) + '\n')
-  }
   var text = 'Code evaluation failed!';
-  try {
-    text = String(safeEval('0;'+info.args.join(' '), context));
-  } catch (e) {
-    if (e && e.message) {
-      text = e.message;
-    } else {
-      text = 'Code evaluation failed!';
+  if (info.args.length < 1) {
+    text = 'Type .help evaluate for instructions.'
+  } else {
+    var context = {
+      cout: null, 
+      print: (x) => {if (context.cout) {context.cout += String(x);} else {context.cout = String(x);}},
+      println: (x) => context.print(String(x) + '\n')
     }
-  }
-  if (context.cout !== null) {
-    text = context.cout;
+    try {
+      text = String(safeEval('0;'+info.args.join(' '), context, {timeout: codeTimeout}));
+    } catch (e) {
+      if (e && e.message) {
+        text = e.message;
+      } else {
+        text = 'Code evaluation failed!';
+      }
+    }
+    if (context.cout !== null) {
+      text = context.cout;
+    }
   }
   const replies = [{ type: 'text', text: text }];
   return { replies: replies, final: true };

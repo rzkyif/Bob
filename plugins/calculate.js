@@ -11,13 +11,17 @@ const math = require('mathjs');
 // handler function
 function handleMessage(info, source) {
   var text = 'Mathematical evaluation failed!';
-  try {
-    text = String(math.evaluate(info.args.join(' ')));
-  } catch (e) {
-    if (e && e.message) {
-      text = e.message;
-    } else {
-      text = 'Mathematical evaluation failed!';
+  if (info.args.length < 1) {
+    text = 'Type .help calculate for instructions.'
+  } else {
+    try {
+      text = String(math.evaluate(info.args.join(' ')));
+    } catch (e) {
+      if (e && e.message) {
+        text = e.message;
+      } else {
+        text = 'Mathematical evaluation failed!';
+      }
     }
   }
   const replies = [{ type: 'text', text: text }];
