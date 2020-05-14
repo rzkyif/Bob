@@ -1,10 +1,25 @@
-function handleEvent(event) {
-    if (event.type !== 'message' || event.message.type !== 'text' || !event.message.text.startsWith('henlo') ) {
-      return { final: false };
-    }
-  
-    const reply = { type: 'text', text: 'henlo too, ' + event.message.text.slice(5) };
-  
-    return { reply: reply, final: true };
+// handler information
+const command = null; // text handler
+const syntax = 'henlo [anything]'
+const description = 'Say henlo back if message starts with henlo';
+const admin = false;
+
+// handler function
+function handleMessage(info, source) {
+  var text = info.text.toLowerCase();
+
+  if ( !text.startsWith('henlo') ) {
+    return { final: false };
+  }
+
+  const reply = { type: 'text', text: 'henlo, user ' + source.userId };
+
+  return { reply: reply, final: true };
 }
-exports.handleEvent = handleEvent;
+
+// exports setup
+exports.handleMessage = handleMessage;
+exports.command = command;
+exports.syntax = syntax;
+exports.description = description;
+exports.admin = admin;
