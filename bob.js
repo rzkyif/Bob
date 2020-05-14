@@ -60,8 +60,8 @@ function handleEvent(event) {
   }
 
   // extract event information
-  const input = event.message.text.slice(1).match(/(?:[^\s"]+|"[^"]*")+/g);
-  const command = input[0].toLowerCase();
+  const input = event.message.text.match(/(?:[^\s"]+|"[^"]*")+/g);
+  const command = input[0].slice(1).toLowerCase();
   var args = null;
   if (input.length > 1) {
     args = input.slice(1);
