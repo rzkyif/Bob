@@ -12,7 +12,7 @@ const math = require('mathjs');
 function handleMessage(info, source) {
   var text = 'Mathematical evaluation failed!';
   try {
-    text = math.evaluate(info.args.join(' '));
+    text = String(math.evaluate(info.args.join(' ')));
   } catch (e) {
     text = 'Mathematical evaluation failed!';
   }

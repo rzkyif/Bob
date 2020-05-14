@@ -12,7 +12,7 @@ const safeEval = require('safe-eval');
 function handleMessage(info, source) {
   var text = 'Code evaluation failed!';
   try {
-    text = safeEval(info.args.join(' '));
+    text = String(safeEval(info.args.join(' ')));
   } catch (e) {
     text = 'Code evaluation failed!';
   }
