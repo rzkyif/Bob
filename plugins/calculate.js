@@ -6,7 +6,7 @@ const description = 'Attempts to solve the inputted mathematical expression. Can
 const admin = false;
 
 // library requirements
-const Calc = require('expression-calculator');
+const Calc = require('expression-calculator').Calc;
 
 // handler function
 function handleMessage(info, source) {

@@ -10,11 +10,11 @@ const safeEval = require('safe-eval');
 
 // handler function
 function handleMessage(info, source) {
-  let text;
+  let text = 'Code evaluation failed!';
   try {
     text = safeEval(info.args.join(' '));
-  } catch (error) {
-    text = error.message;
+  } catch (e) {
+    text = 'Code evaluation failed!';
   }
   const replies = [{ type: 'text', text: text }];
   return { replies: replies, final: true };
