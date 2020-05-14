@@ -64,12 +64,12 @@ function handleEvent(event) {
   }
 
   // extract event information
-  const input = event.message.text.match(/((?:[^\s"]+|"[^"]*")+|(?:[^\s']+|'[^']*')+|(?:[^\s`]+|`[^`]*`)+)+/g);
+  const input = event.message.text.match(/(?:[^\s'`"]+|"[^"]*"|'[^']*'|`[^`]*`)+/g);
   const command = input[0].slice(1).toLowerCase();
   let args = null;
   if (input.length > 1) {
     args = input.slice(1).map((arg) => {
-      return arg.replace(/["'`]+/g, '');
+      return arg.replace(/(^["'`]|["'`]$)/g, '');
     });
   }
   const source = { 
