@@ -116,7 +116,11 @@ function handleEvent(event) {
     for (var i = 0; i < messageHandlers.length; i++) {
       // pass message only to proper handlers
       if (
-        (messageHandlers[i].command && (!input[0].startsWith('.') || (messageHandlers[i].command !== command && !(command in messageHandlers[i].alias)))) || 
+        (messageHandlers[i].command && 
+          (!input[0].startsWith('.') || 
+          messageHandlers[i].command !== command || 
+          (messageHandlers[i].alias && !(command in messageHandlers[i].alias)))
+        ) || 
         (messageHandlers[i].admin && source.userId !== adminId) ||
         (source.userId in locks && i != locks[source.userId])
       ) {
