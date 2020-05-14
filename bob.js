@@ -64,11 +64,13 @@ function handleEvent(event) {
   }
 
   // extract event information
-  const input = event.message.text.match(/(?:[^\s"]+|"[^"]*")+/g);
+  const input = event.message.text.match(/((?:[^\s"]+|"[^"]*")+|(?:[^\s']+|'[^']*')+|(?:[^\s`]+|`[^`]*`)+)+/g);
   const command = input[0].slice(1).toLowerCase();
   let args = null;
   if (input.length > 1) {
-    args = input.slice(1);
+    args = input.slice(1).map((arg) => {
+      return arg.replace(/["'`]+/g, '');
+    });
   }
   const source = { 
     type: event.source.type, 
@@ -125,9 +127,16 @@ function handleEvent(event) {
           // skip if handler is a command handler but its not a command
           continue;
         }
-        if (command !== messageHandlers[i].command && !(command in messageHandlers[i].alias)) {
-          // skip if command is not accepted by handler
-          continue;
+        if (command !== messageHandlers[i].command) {
+          if (messageHandlers[i].alias) {
+            if (!messageHandlers[i].alias.includes(command)) {
+              // skip if wrong command and has alias but command is not alias
+              continue
+            }
+          } else {
+            // skip if wrong command and no alias
+            continue;
+          }
         }
       }
       if (messageHandlers[i].admin && source.userId !== adminId) {
