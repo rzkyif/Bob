@@ -2,7 +2,7 @@
 const command = 'eval'; // command handler
 const alias = ['js', 'javascript'];
 const syntax = 'eval [javascript code]'
-const description = 'Attempts to compile and run JavaScript code and returns the returned value.';
+const description = 'Compiles the inputted Javascript code with `safe-eval` and displays the returned value.';
 const admin = false;
 
 // library requirements
@@ -10,7 +10,7 @@ const safeEval = require('safe-eval');
 
 // handler function
 function handleMessage(info, source) {
-  let text = 'Code evaluation failed!';
+  var text = 'Code evaluation failed!';
   try {
     text = safeEval(info.args.join(' '));
   } catch (e) {

@@ -1,30 +1,20 @@
 // handler information
 const command = 'calculate'; // command handler
-const alias = ['calc', 'hitung', 'c', 'h'];
+const alias = ['calc', 'hitung', 'c', 'mathjs', 'math'];
 const syntax = 'calculate [expr1] [expr2] [...]'
-const description = 'Attempts to solve the inputted mathematical expression. Can use result of previous expressions in later expressions.';
+const description = 'Attempts to solve the inputted mathematical expression with `MathJS`.';
 const admin = false;
 
 // library requirements
-const Calc = require('expression-calculator').Calc;
+const math = require('mathjs');
 
 // handler function
 function handleMessage(info, source) {
-  let text;
-  let calc = Calc();
-  let results = {}
-  info.args.forEach((arg, i) => {
-    try {
-        results['expr'+i] = calc.compile(arg).calc(results);
-      } catch (error) {
-        results['expr'+i] = null;
-      }
-  });
-  text = 'Results:\n'
-  for (let i = 0; i < info.args.length; i++) {
-      let name = 'expr' + i;
-      text += name + ' = ' + String(results[name]);
-      if (i < info.args.length-1) text += '\n';
+  var text = 'Mathematical evaluation failed!';
+  try {
+    text = math.evaluate(info.args.join(' '));
+  } catch (e) {
+    text = 'Mathematical evaluation failed!';
   }
   const replies = [{ type: 'text', text: text }];
   return { replies: replies, final: true };
