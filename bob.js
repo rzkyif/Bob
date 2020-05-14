@@ -19,10 +19,10 @@ const client = new line.Client(config);
 const app = express();
 
 // variables
-var messageHandlers = []
-var commands = []
-var locks = {}
-var adminId = ''
+let messageHandlers = []
+let commands = []
+let locks = {}
+let adminId = ''
 
 // callback route handler
 app.post('/callback', line.middleware(config), (req, res) => {
@@ -38,9 +38,9 @@ app.post('/callback', line.middleware(config), (req, res) => {
 // module loading function definition and call
 function reloadModules() {
   console.log('Reloading modules...');
-  var files = fs.readdirSync(config.pluginDirectory).forEach((file) => {
-    var pluginPath = './' + path.join(config.pluginDirectory, file);
-    var plugin = require(pluginPath);
+  let files = fs.readdirSync(config.pluginDirectory).forEach((file) => {
+    let pluginPath = './' + path.join(config.pluginDirectory, file);
+    let plugin = require(pluginPath);
     messageHandlers.push(plugin);
     if (plugin.command) {
       commands.push(plugin.command)
@@ -62,7 +62,7 @@ function handleEvent(event) {
   // extract event information
   const input = event.message.text.match(/(?:[^\s"]+|"[^"]*")+/g);
   const command = input[0].slice(1).toLowerCase();
-  var args = null;
+  let args = null;
   if (input.length > 1) {
     args = input.slice(1);
   }
@@ -73,10 +73,10 @@ function handleEvent(event) {
   };
 
   // start processing
-  var finalReply = [];
+  let finalReply = [];
   if (input[0].startsWith('.') && command === 'op') {
     // op command, to register admin
-    var reply;
+    let reply;
     if (source.placeId || args[0] !== config.adminPassword) {
       reply = 'Wrong password!';
     } else {
@@ -86,7 +86,7 @@ function handleEvent(event) {
     finalReply = [{ type: 'text', text: reply }];
   } else if (input[0].startsWith('.') && command === 'refresh') {
     // refresh command, to reload modules
-    var reply;
+    let reply;
     if (source.placeId || source.userId !== adminId) {
       reply = 'You are not the administrator of this bot!';
     } else {
@@ -98,7 +98,7 @@ function handleEvent(event) {
     // help function, to check documentation
     reply = "";
     if (args) {
-      var i = commands.findIndex((c) => c === args[0])
+      let i = commands.findIndex((c) => c === args[0])
       if (i >= 0) {
         reply = "Syntax: " + messageHandlers[i].syntax;
         reply += "\n\n" + messageHandlers[i].description;
@@ -113,7 +113,7 @@ function handleEvent(event) {
     finalReply = [{ type: 'text', text: reply }];
   } else {
     // everything else goes here
-    for (var i = 0; i < messageHandlers.length; i++) {
+    for (let i = 0; i < messageHandlers.length; i++) {
       // pass message only to proper handlers
       if (
         (messageHandlers[i].command && 
@@ -128,7 +128,7 @@ function handleEvent(event) {
       }
 
       // ready info for passing according to handler type
-      var info;
+      let info;
       if (messageHandlers[i].command) {
         info = { command: command, args: args };
       } else {
@@ -155,7 +155,7 @@ function handleEvent(event) {
   }
 
   // return the final reply
-  if (finalReply) {
+  if (finalReply.length > 0) {
     return client.replyMessage(event.replyToken, finalReply);
   } else {
     return Promise.resolve(null);

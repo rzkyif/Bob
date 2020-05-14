@@ -7,7 +7,7 @@ const admin = false;
 
 // handler function
 function handleMessage(info, source) {
-  var text = info.text.toLowerCase();
+  let text = info.text.toLowerCase();
 
   if ( !text.startsWith('henlo') ) {
     return [{ final: false }];
