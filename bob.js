@@ -145,7 +145,7 @@ function handleEvent(event) {
           delete locks[source.userId];
         }
       }
-      if (replies.length + finalReply.length < 5) {
+      if (replies && replies.length + finalReply.length < 5) {
         finalReply.push(...replies);
       }
       if (final || finalReply.length >= 5) {
