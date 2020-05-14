@@ -59,7 +59,7 @@ function handleEvent(event) {
 
   // extract event information
   const input = event.message.text.slice(1).match(/(?:[^\s"]+|"[^"]*")+/g);
-  const command = input[0].slice(1);
+  const command = input[0].slice(1).toLowerCase();
   var args = null;
   if (input.length > 1) {
     args = input.slice(1);
@@ -153,6 +153,8 @@ function handleEvent(event) {
 
   // return the final reply
   if (finalReply) {
+    console.log('Sending reply: ');
+    console.log(finalReply);
     return client.replyMessage(event.replyToken, finalReply);
   } else {
     return Promise.resolve(null);
