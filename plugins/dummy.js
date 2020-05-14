@@ -1,5 +1,6 @@
 // handler information
 const command = 'dummy'; // command handler
+const alias = ['d', 'doctor', 'demo'];
 const syntax = 'dummy [anything]'
 const description = 'Prints out command and arguments';
 const admin = false;

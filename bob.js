@@ -102,18 +102,13 @@ function handleEvent(event) {
       if (i >= 0) {
         reply = "Syntax: " + messageHandlers[i].syntax;
         reply += "\n\n" + messageHandlers[i].description;
+        reply += "\n\nAlias: " + messageHandlers[i].alias.join(', ');
       } else {
         reply = "Command not found!"
       }
     } else {
       reply = "Available commands:\n";
-      commands.forEach((c, i) => {
-        reply += c;
-        if (i < commands.length-1) {
-          reply += ', ';
-        }
-      });
-      reply += '.'
+      reply += commands.join(', ');
     }
     finalReply = { type: 'text', text: reply };
   } else {
@@ -121,7 +116,7 @@ function handleEvent(event) {
     for (var i = 0; i < messageHandlers.length; i++) {
       // pass message only to proper handlers
       if (
-        (messageHandlers[i].command && (!input[0].startsWith('.') || messageHandlers.command !== command)) || 
+        (messageHandlers[i].command && (!input[0].startsWith('.') || (messageHandlers[i].command !== command && !(command in messageHandlers[i].alias)))) || 
         (messageHandlers[i].admin && source.userId !== adminId) ||
         (source.userId in locks && i != locks[source.userId])
       ) {

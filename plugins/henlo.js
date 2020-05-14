@@ -1,5 +1,6 @@
 // handler information
 const command = null; // text handler
+const alias = null;
 const syntax = 'henlo [anything]'
 const description = 'Say henlo back if message starts with henlo';
 const admin = false;
