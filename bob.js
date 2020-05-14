@@ -118,11 +118,24 @@ function handleEvent(event) {
   } else {
     // everything else goes here
     for (let i = 0; i < messageHandlers.length; i++) {
+
       // pass message only to proper handlers
-      if ((messageHandlers[i].command && (!input[0].startsWith('.') || (messageHandlers[i].command !== command && (!messageHandlers[i].alias || (messageHandlers[i].alias && !(command in messageHandlers[i].alias)))))) || 
-        (messageHandlers[i].admin && source.userId !== adminId) ||
-        (source.userId in locks && i != locks[source.userId])
-      ) {
+      if (messageHandlers[i].command) {
+        if (!input[0].startsWith('.')) {
+          // skip if handler is a command handler but its not a command
+          continue;
+        }
+        if (command !== messageHandlers[i].command && !(command in messageHandlers[i].alias)) {
+          // skip if command is not accepted by handler
+          continue;
+        }
+      }
+      if (messageHandlers[i].admin && source.userId !== adminId) {
+        // skip if handler is admin only and user is not admin
+        continue;
+      }
+      if (source.userId in locks && i != locks[source.userId]) {
+        // skip if user is locked on a handler and this is not the handler
         continue;
       }
 
