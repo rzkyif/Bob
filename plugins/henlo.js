@@ -13,9 +13,9 @@ function handleMessage(info, source) {
     return [{ final: false }];
   }
 
-  const reply = { type: 'text', text: 'henlo, user ' + source.userId };
+  const replies = [{ type: 'text', text: 'henlo, user ' + source.userId }];
 
-  return [{ reply: reply, final: true }];
+  return { replies: replies, final: true };
 }
 
 // exports setup

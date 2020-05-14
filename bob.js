@@ -37,7 +37,9 @@ app.post('/callback', line.middleware(config), (req, res) => {
 
 // module loading function definition and call
 function reloadModules() {
+
   console.log('Reloading modules...');
+
   let files = fs.readdirSync(config.pluginDirectory).forEach((file) => {
     let pluginPath = './' + path.join(config.pluginDirectory, file);
     let plugin = require(pluginPath);
@@ -47,7 +49,9 @@ function reloadModules() {
     }
     delete require.cache[require.resolve(pluginPath)];
   })
+
   console.log('Module reload successful!');
+  
 }
 reloadModules();
 
