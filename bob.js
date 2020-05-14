@@ -96,7 +96,7 @@ function handleEvent(event) {
     finalReply = [{ type: 'text', text: reply }];
   } else if (input[0].startsWith('.') && command === 'help') {
     // help function, to check documentation
-    reply = "";
+    let reply;
     if (args) {
       let i = commands.findIndex((c) => c === args[0])
       if (i >= 0) {
