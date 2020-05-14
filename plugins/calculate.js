@@ -14,7 +14,11 @@ function handleMessage(info, source) {
   try {
     text = String(math.evaluate(info.args.join(' ')));
   } catch (e) {
-    text = 'Mathematical evaluation failed!';
+    if (e && e.message) {
+      text = e.message;
+    } else {
+      text = 'Mathematical evaluation failed!';
+    }
   }
   const replies = [{ type: 'text', text: text }];
   return { replies: replies, final: true };
