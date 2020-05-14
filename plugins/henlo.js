@@ -10,7 +10,7 @@ function handleMessage(info, source) {
   let text = info.text.toLowerCase();
 
   if ( !text.startsWith('henlo') ) {
-    return [{ final: false }];
+    return { final: false };
   }
 
   const replies = [{ type: 'text', text: 'henlo, user ' + source.userId }];

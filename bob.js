@@ -51,7 +51,7 @@ function reloadModules() {
   })
 
   console.log('Module reload successful!');
-  
+
 }
 reloadModules();
 
@@ -119,12 +119,7 @@ function handleEvent(event) {
     // everything else goes here
     for (let i = 0; i < messageHandlers.length; i++) {
       // pass message only to proper handlers
-      if (
-        (messageHandlers[i].command && 
-          (!input[0].startsWith('.') || 
-          messageHandlers[i].command !== command || 
-          (messageHandlers[i].alias && !(command in messageHandlers[i].alias)))
-        ) || 
+      if ((messageHandlers[i].command && (!input[0].startsWith('.') || (messageHandlers[i].command !== command && (!messageHandlers[i].alias || (messageHandlers[i].alias && !(command in messageHandlers[i].alias)))))) || 
         (messageHandlers[i].admin && source.userId !== adminId) ||
         (source.userId in locks && i != locks[source.userId])
       ) {
