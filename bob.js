@@ -83,7 +83,7 @@ function handleEvent(event) {
   if (input[0].startsWith('.') && command === 'op') {
     // op command, to register admin
     let reply;
-    if (source.placeId || args[0] !== config.adminPassword) {
+    if (source.placeId || !args || args[0] !== config.adminPassword) {
       reply = 'Wrong password!';
     } else {
       adminId = source.userId;
@@ -97,7 +97,7 @@ function handleEvent(event) {
       reply = 'You are not the administrator of this bot!';
     } else {
       reloadModules();
-      reply = 'New admin registered!';
+      reply = 'Modules reloaded!';
     }
     finalReply = [{ type: 'text', text: reply }];
   } else if (input[0].startsWith('.') && command === 'help') {
