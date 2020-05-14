@@ -21,6 +21,7 @@ function handleMessage(info, source) {
 // exports setup
 exports.handleMessage = handleMessage;
 exports.command = command;
+exports.alias = alias;
 exports.syntax = syntax;
 exports.description = description;
 exports.admin = admin;
