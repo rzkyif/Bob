@@ -13,7 +13,7 @@ function handleMessage(info, source) {
     return { final: false };
   }
 
-  const replies = [{ type: 'text', text: 'henlo, user ' + source.userId }];
+  const replies = [{ type: 'text', text: 'henlo, ' + source.userId }];
 
   return { replies: replies, final: true };
 }
