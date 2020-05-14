@@ -64,7 +64,7 @@ function handleEvent(event) {
   }
 
   // extract event information
-  const input = event.message.text.match(/(?:[^ \t'`"]+|"[^"]*"|'[^']*'|`[^`]*`)+/g);
+  const input = event.message.text.match(/(?:[^ \n\t'`"]+|"[^"]*"|'[^']*'|`[^`]*`)+/g);
   const command = input[0].slice(1).toLowerCase();
   let args = null;
   if (input.length > 1) {

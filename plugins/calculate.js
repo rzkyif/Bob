@@ -1,7 +1,7 @@
 // handler information
 const command = 'calculate'; // command handler
 const alias = ['calc', 'hitung', 'c', 'mathjs', 'math'];
-const syntax = 'calculate [expr1] [expr2] [...]'
+const syntax = 'calculate [mathematical expression]'
 const description = 'Attempts to solve the inputted mathematical expression with `MathJS`.';
 const admin = false;
 
