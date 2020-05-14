@@ -12,7 +12,7 @@ const safeEval = require('safe-eval');
 function handleMessage(info, source) {
   var context = {
     cout: null,
-    print: (x) => {if (context.cout) {context.cout += String(x);} else {contex.cout = String(x);}},
+    print: (x) => {if (context.cout) {context.cout += String(x);} else {context.cout = String(x);}},
     println: (x) => context.print(String(x) + '\n')
   }
   var text = 'Code evaluation failed!';
