@@ -17,7 +17,7 @@ function handleMessage(info, source) {
   }
   var text = 'Code evaluation failed!';
   try {
-    text = String(safeEval(info.args.join(' ')), context);
+    text = String(safeEval(info.args.join(' '), context));
   } catch (e) {
     if (e && e.message) {
       text = e.message;
