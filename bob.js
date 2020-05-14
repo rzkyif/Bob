@@ -37,6 +37,7 @@ app.post('/callback', line.middleware(config), (req, res) => {
 
 // module loading function definition and call
 function reloadModules() {
+  console.log('Reloading modules...');
   var files = fs.readdirSync(config.pluginDirectory).forEach((file) => {
     var pluginPath = './' + path.join(config.pluginDirectory, file);
     var plugin = require(pluginPath);
@@ -46,6 +47,7 @@ function reloadModules() {
     }
     delete require.cache[require.resolve(pluginPath)];
   })
+  console.log('Module reload successful!');
 }
 reloadModules();
 
@@ -69,6 +71,9 @@ function handleEvent(event) {
     placeId: (event.source.type === 'group' ? event.source.groupId : (event.source.type === 'room' ? event.source.roomId : null)), 
     userId: event.source.userId 
   };
+  console.log('Received:')
+  console.log(command);
+  console.log(args);
 
   // start processing
   var finalReply = null;
