@@ -17,10 +17,11 @@ const config = {
 // constants
 const client = new line.Client(config);
 const app = express();
+const commandPrefix = '.';
 
 // variables
 let messageHandlers = []
-let commands = []
+let commands = {}
 let locks = {}
 let adminId = ''
 
@@ -40,12 +41,16 @@ function reloadModules() {
 
   console.log('Reloading modules...');
 
+  let i = 0;
   let files = fs.readdirSync(config.pluginDirectory).forEach((file) => {
     let pluginPath = './' + path.join(config.pluginDirectory, file);
     let plugin = require(pluginPath);
     messageHandlers.push(plugin);
     if (plugin.command) {
-      commands.push(plugin.command)
+      commands[plugin.command] = i;
+      plugin.alias.forEach((alias) => {
+        commands[alias] = i;
+      });
     }
     delete require.cache[require.resolve(pluginPath)];
   })
@@ -72,7 +77,7 @@ async function handleEvent(event) {
   } else {
     input = event.message.text.match(/(?:[^\n\t'`"]+|`[^`]*`|'[^']*'|"[^"]*")+/g); 
   }
-  const command = input[0].slice(1).toLowerCase();
+  const command = input[0].slice(commandPrefix.length).toLowerCase();
   let args = null;
   if (input.length > 1) {
     args = input.slice(1).map((arg) => {
@@ -87,7 +92,7 @@ async function handleEvent(event) {
 
   // start processing
   let finalReply = [];
-  if (input[0].startsWith('.') && command === 'op') {
+  if (input[0].startsWith(commandPrefix) && command === 'op') {
     // op command, to register admin
     let reply;
     if (source.placeId || !args || args[0] !== config.adminPassword) {
@@ -97,7 +102,7 @@ async function handleEvent(event) {
       reply = 'New admin registered!';
     }
     finalReply = [{ type: 'text', text: reply }];
-  } else if (input[0].startsWith('.') && command === 'refresh') {
+  } else if (input[0].startsWith(commandPrefix) && command === 'refresh') {
     // refresh command, to reload modules
     let reply;
     if (source.placeId || source.userId !== adminId) {
@@ -107,13 +112,13 @@ async function handleEvent(event) {
       reply = 'Modules reloaded!';
     }
     finalReply = [{ type: 'text', text: reply }];
-  } else if (input[0].startsWith('.') && command === 'help') {
+  } else if (input[0].startsWith(commandPrefix) && command === 'help') {
     // help function, to check documentation
     let reply;
     if (args) {
-      let i = commands.findIndex((c) => c === args[0])
-      if (i >= 0) {
-        reply = "Syntax:\n" + messageHandlers[i].syntax;
+      let i = command[args[0]];
+      if (i !== undefined) {
+        reply = "Syntax:\n" + commandPrefix + messageHandlers[i].syntax;
         reply += "\n\nDescription:\n" + messageHandlers[i].description;
         reply += "\n\nAlias:\n" + messageHandlers[i].alias.join(', ');
       } else {
