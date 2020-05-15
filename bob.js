@@ -126,7 +126,7 @@ async function handleEvent(event) {
       }
     } else {
       reply = "Available commands:\n";
-      reply += commands.keys().join(', ');
+      reply += Object.keys(commands).join(', ');
     }
     finalReply = [{ type: 'text', text: reply }];
   } else {
