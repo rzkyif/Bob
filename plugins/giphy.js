@@ -1,6 +1,6 @@
 // constants
 const maxSearchKeyLength = 100;
-const timeout = 100;
+const timeout = 1000;
 const api_key = process.env.API_KEY_GIPHY;
 
 // handler information

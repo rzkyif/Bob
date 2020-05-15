@@ -1,6 +1,6 @@
 // constants
 const maxSearchKeyLength = 100;
-const timeout = 100;
+const timeout = 1000;
 const api_url = "https://www.googleapis.com/youtube/v3/search"
 const api_key = process.env.API_KEY_YOUTUBE;
 let carouselTemplate = (contents) => ({
