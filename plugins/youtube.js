@@ -1,5 +1,6 @@
 // constants
 const maxSearchKeyLength = 100;
+const timeout = 100;
 const api_url = "https://www.googleapis.com/youtube/v3/search"
 const api_key = process.env.API_KEY_YOUTUBE;
 let carouselTemplate = (contents) => ({
@@ -57,7 +58,7 @@ let bubbleTemplate = (thumbnailUrl, title, link) => (
 const command = 'youtube'; // command handler
 const alias = ['yt', 'y'];
 const syntax = 'youtube\n[search keyword]'
-const description = 'Searches youtube with the inputted keyword. Maximum keyword length is '+maxSearchKeyLength+' characters.';
+const description = 'Searches Youtube with the inputted keyword. Maximum keyword length is '+maxSearchKeyLength+' characters.';
 const admin = false;
 
 // library requirements
@@ -80,7 +81,7 @@ async function handleMessage(info, source) {
         type: 'video'
       });
       let link = api_url + '?' + params;
-      let res = await fetch(link);
+      let res = await fetch(link, {timeout: timeout});
       let json = await res.json();
       let items = json.items;
       results = []
