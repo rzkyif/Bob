@@ -80,9 +80,7 @@ async function handleMessage(info, source) {
       });
       let link = api_url + '?' + params;
       let res = await fetch(link);
-      console.log(link);
       let json = await res.json();
-      console.log(json);
       let items = json.items;
       results = []
       items.forEach((item) => {
