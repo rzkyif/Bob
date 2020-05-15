@@ -30,7 +30,7 @@ async function handleMessage(info, source) {
       info.args.forEach(arg => {
         boxes.push({text: arg});
       });
-      let body = URLSearchParams();
+      let body = new URLSearchParams();
       body.append('template_id', template_id);
       body.append('username', api_username_imgflip);
       body.append('password', api_password_imgflip);
