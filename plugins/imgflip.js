@@ -36,7 +36,7 @@ async function handleMessage(info, source) {
       body.append('password', api_password_imgflip);
       body.append('text0', info.args[0]);
       if (info.args[1] !== undefined) body.append('text1', info.args[1]);
-      body.append('boxes', boxes);
+      // body.append('boxes', boxes);
       console.log(body);
       console.log(body.toString());
       let json = await fetch(api_url_caption, { method: 'POST', body: body, timeout: timeout }).then(res => res.json());
