@@ -37,7 +37,7 @@ async function handleMessage(info, source) {
         password: api_password_imgflip,
         boxes: boxes
       }
-      let json = await fetch(api_url, { method: 'post', body: body, timeout: timeout }).then(res => res.json());
+      let json = await fetch(api_url_caption, { method: 'post', body: body, timeout: timeout }).then(res => res.json());
       if (json.success === true) {
         replies[0] = { type: 'image', originalContentUrl: json.data.url, previewImageUrl: json.data.url }
       } else {
