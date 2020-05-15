@@ -28,7 +28,7 @@ async function handleMessage(info, source) {
       let index = Math.floor(Math.random() * 101);
       let template_id = templates.data.memes[index].id;
       let boxes = []
-      args.forEach(arg => {
+      info.args.forEach(arg => {
         boxes.push({text: arg});
       });
       let body = {
