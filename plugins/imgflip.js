@@ -19,7 +19,6 @@ const fetch = require('node-fetch');
 // handler function
 async function handleMessage(info, source) {
   var replies = [{ type: 'text', text: 'No result!' }];
-  var keyword = info.args.join(' ');
   if (info.args.length < 1 || info.args.length > 5 || info.args.some((arg) => arg.length > maxTextLength)) {
     replies[0].text = 'Type .help imgflip for instructions.'
   } else {
@@ -31,13 +30,12 @@ async function handleMessage(info, source) {
       info.args.forEach(arg => {
         boxes.push({text: arg});
       });
-      let body = {
-        template_id: template_id,
-        username: api_username_imgflip,
-        password: api_password_imgflip,
-        boxes: boxes
-      }
-      let json = await fetch(api_url_caption, { method: 'post', body: JSON.stringify(body), timeout: timeout }).then(res => res.json());
+      let body = URLSearchParams();
+      body.append('template_id', template_id);
+      body.append('username', api_username_imgflip);
+      body.append('password', api_password_imgflip);
+      body.append('boxes', boxes);
+      let json = await fetch(api_url_caption, { method: 'POST', body: body, timeout: timeout }).then(res => res.json());
       if (json.success === true) {
         replies[0] = { type: 'image', originalContentUrl: json.data.url, previewImageUrl: json.data.url }
       } else {
