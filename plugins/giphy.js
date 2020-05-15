@@ -28,7 +28,7 @@ async function handleMessage(info, source) {
       let data = json.data;
       let index = Math.floor(Math.random() * 26);
       let gif = data[index];
-      replies[0] = { type: 'image', originalContentUrl: gif.fixed_width.url, previewImageUrl: gif.fixed_width_downsampled.url }
+      replies[0] = { type: 'image', originalContentUrl: gif.images.fixed_width.url, previewImageUrl: gif.images.fixed_width_downsampled.url }
     } catch (e) {
       if (e && e.message) {
         replies[0].text = e.message;
