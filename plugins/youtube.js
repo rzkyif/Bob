@@ -81,8 +81,9 @@ async function handleMessage(info, source) {
       let link = api_url + '?' + params;
       let res = await fetch(link);
       console.log(link);
-      console.log(res.json());
-      let items = res.json().items;
+      let json = res.json();
+      console.log(json);
+      let items = json.items;
       results = []
       items.forEach((item) => {
         results.push(bubbleTemplate(item.snippet.thumbnails.default.url, item.snippet.title, 'https://www.youtube.com/watch?v='+item.id.videoId));
