@@ -56,7 +56,7 @@ function reloadModules() {
 reloadModules();
 
 // global event handle
-function handleEvent(event) {
+async function handleEvent(event) {
 
   // only handle text messages
   if (event.type !== 'message' || event.message.type !== 'text' ) {
@@ -64,7 +64,14 @@ function handleEvent(event) {
   }
 
   // extract event information
-  const input = event.message.text.match(/(?:[^ \n\t'`"]+|"[^"]*"|'[^']*'|`[^`]*`)+/g);
+  let input;
+  let newline = event.message.text.indexOf('\n');
+  let space = event.message.text.indexOf(' ');
+  if (newline === -1 || (space !== -1 && space < newline)) {
+    input = event.message.text.match(/(?:[^ \n\t'`"]+|`[^`]*`|'[^']*'|"[^"]*")+/g);
+  } else {
+    input = event.message.text.match(/(?:[^\n\t'`"]+|`[^`]*`|'[^']*'|"[^"]*")+/g); 
+  }
   const command = input[0].slice(1).toLowerCase();
   let args = null;
   if (input.length > 1) {

@@ -1,15 +1,15 @@
+// constants
+const codeTimeout = 100;
+
 // handler information
 const command = 'evaluate'; // command handler
 const alias = ['js', 'javascript', 'e', 'eval'];
 const syntax = 'evaluate [javascript code]'
-const description = 'Compiles the inputted Javascript code with `safe-eval` and displays the returned value.';
+const description = 'Compiles the inputted Javascript code with `safe-eval` and displays the returned value. Timeout after code runs for '+codeTimeout+'ms.';
 const admin = false;
 
 // library requirements
 const safeEval = require('safe-eval');
-
-// constants
-const codeTimeout = 10000;
 
 // handler function
 function handleMessage(info, source) {
