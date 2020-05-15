@@ -4,7 +4,7 @@ const codeTimeout = 100;
 // handler information
 const command = 'evaluate'; // command handler
 const alias = ['js', 'javascript', 'e', 'eval'];
-const syntax = 'evaluate [javascript code]'
+const syntax = 'evaluate\n[javascript code]'
 const description = 'Compiles the inputted Javascript code with `safe-eval` and displays the returned value. Timeout after code runs for '+codeTimeout+'ms.';
 const admin = false;
 
@@ -12,7 +12,7 @@ const admin = false;
 const safeEval = require('safe-eval');
 
 // handler function
-function handleMessage(info, source) {
+async function handleMessage(info, source) {
   var text = 'Code evaluation failed!';
   if (info.args.length < 1) {
     text = 'Type .help evaluate for instructions.'

@@ -60,7 +60,7 @@ async function handleEvent(event) {
 
   // only handle text messages
   if (event.type !== 'message' || event.message.type !== 'text' ) {
-    return Promise.resolve(null);
+    return null;
   }
 
   // extract event information
@@ -113,9 +113,9 @@ async function handleEvent(event) {
     if (args) {
       let i = commands.findIndex((c) => c === args[0])
       if (i >= 0) {
-        reply = "Syntax: " + messageHandlers[i].syntax;
-        reply += "\n\n" + messageHandlers[i].description;
-        reply += "\n\nAlias: " + messageHandlers[i].alias.join(', ');
+        reply = "Syntax:\n" + messageHandlers[i].syntax;
+        reply += "\n\nDescription:\n" + messageHandlers[i].description;
+        reply += "\n\nAlias:\n" + messageHandlers[i].alias.join(', ');
       } else {
         reply = "Command not found!"
       }
@@ -165,7 +165,7 @@ async function handleEvent(event) {
       info.time = event.timestamp;
       
       // process with handler
-      const {replies, final, lock} = messageHandlers[i].handleMessage(info, source);
+      var {replies, final, lock} = await messageHandlers[i].handleMessage(info, source);
       if (lock !== undefined) {
         if (lock === true) {
           locks[source.userId] = i;
@@ -174,6 +174,9 @@ async function handleEvent(event) {
         }
       }
       if (replies && replies.length + finalReply.length < 5) {
+        replies.forEach((reply) => {
+          if (reply.text && reply.text.length > 3000) reply.text = reply.text.slice(0, 3000);
+        });
         finalReply.push(...replies);
       }
       if (final || finalReply.length >= 5) {
@@ -186,7 +189,7 @@ async function handleEvent(event) {
   if (finalReply.length > 0) {
     return client.replyMessage(event.replyToken, finalReply);
   } else {
-    return Promise.resolve(null);
+    return null;
   }
 }
 

@@ -1,12 +1,12 @@
 // handler information
 const command = 'test'; // command handler
 const alias = ['t'];
-const syntax = 'test [anything]'
+const syntax = 'test\n[argument(s)]'
 const description = 'Prints out the command and arguments that were inputted.';
 const admin = false;
 
 // handler function
-function handleMessage(info, source) {
+async function handleMessage(info, source) {
   let text = 'Command:\n' + info.command;
   text += '\nArguments:'
   info.args.forEach((arg, i) => {

@@ -10,6 +10,7 @@
     "@line/bot-sdk": "^6.8.4",
     "express": "^4.17.1",
     "mathjs": "^7.0.0",
+    "node-fetch": "^2.6.0",
     "safe-eval": "^0.4.1"
   }
 }
