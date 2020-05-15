@@ -84,7 +84,7 @@ async function handleMessage(info, source) {
       let items = json.items;
       results = []
       items.forEach((item) => {
-        results.push(bubbleTemplate(item.snippet.thumbnails.default.url, item.snippet.title, 'https://www.youtube.com/watch?v='+item.id.videoId));
+        results.push(bubbleTemplate(item.snippet.thumbnails.high.url, item.snippet.title.slice(0,40), 'https://www.youtube.com/watch?v='+item.id.videoId));
       });
       replies[0] = carouselTemplate(results);
     } catch (e) {
