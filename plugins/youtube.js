@@ -75,7 +75,7 @@ async function handleMessage(info, source) {
       let params = querystring.stringify({
         part: 'snippet',
         key: api_key,
-        maxResults: 10,
+        maxResults: 3,
         q: keyword
       });
       let link = api_url + '?' + params;
