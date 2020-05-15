@@ -78,7 +78,10 @@ async function handleMessage(info, source) {
         maxResults: 10,
         q: keyword
       });
-      let res = await fetch(api_url + '?' + params);
+      let link = api_url + '?' + params;
+      let res = await fetch(link);
+      console.log(link);
+      console.log(res.json());
       let items = res.json().items;
       results = []
       items.forEach((item) => {
