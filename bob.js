@@ -52,6 +52,7 @@ function reloadModules() {
         commands[alias] = i;
       });
     }
+    i++;
     delete require.cache[require.resolve(pluginPath)];
   })
 
