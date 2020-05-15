@@ -116,7 +116,7 @@ async function handleEvent(event) {
     // help function, to check documentation
     let reply;
     if (args) {
-      let i = command[args[0]];
+      let i = commands[args[0]];
       if (i !== undefined) {
         reply = "Syntax:\n" + commandPrefix + messageHandlers[i].syntax;
         reply += "\n\nDescription:\n" + messageHandlers[i].description;
