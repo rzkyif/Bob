@@ -28,12 +28,14 @@ async function handleMessage(info, source) {
       let template_id = templates.data.memes[index].id;
       let boxes = []
       info.args.forEach(arg => {
-        boxes.push({text: arg});
+        boxes.push( { text: arg } );
       });
       let body = new URLSearchParams();
       body.append('template_id', template_id);
       body.append('username', api_username_imgflip);
       body.append('password', api_password_imgflip);
+      body.append('text0', info.args[0]);
+      if (info.args[1] !== undefined) body.append('text1', info.args[1]);
       body.append('boxes', boxes);
       let json = await fetch(api_url_caption, { method: 'POST', body: body, timeout: timeout }).then(res => res.json());
       if (json.success === true) {
