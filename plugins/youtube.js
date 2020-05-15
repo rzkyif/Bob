@@ -75,7 +75,7 @@ async function handleMessage(info, source) {
       let params = querystring.stringify({
         part: 'snippet',
         key: api_key,
-        maxResults: 3,
+        maxResults: 5,
         q: keyword
       });
       let link = api_url + '?' + params;
@@ -86,7 +86,7 @@ async function handleMessage(info, source) {
       items.forEach((item) => {
         results.push(bubbleTemplate(item.snippet.thumbnails.high.url, item.snippet.title.slice(0,40), 'https://www.youtube.com/watch?v='+item.id.videoId));
       });
-      replies[0] = carouselTemplate(results);
+      replies[0] = { type: 'flex', altText: 'Youtube search result.', contents: carouselTemplate(results) };
     } catch (e) {
       if (e && e.message) {
         replies[0].text = e.message;
