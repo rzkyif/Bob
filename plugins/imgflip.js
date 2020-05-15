@@ -37,6 +37,8 @@ async function handleMessage(info, source) {
       body.append('text0', info.args[0]);
       if (info.args[1] !== undefined) body.append('text1', info.args[1]);
       body.append('boxes', boxes);
+      console.log(body);
+      console.log(body.toString());
       let json = await fetch(api_url_caption, { method: 'POST', body: body, timeout: timeout }).then(res => res.json());
       if (json.success === true) {
         replies[0] = { type: 'image', originalContentUrl: json.data.url, previewImageUrl: json.data.url }
