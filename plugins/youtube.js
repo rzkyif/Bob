@@ -39,7 +39,7 @@ let bubbleTemplate = (thumbnailUrl, title, link) => (
         backgroundColor: "#00000066",
         paddingAll: "15px",
         paddingTop: "10px",
-        height: "40px",
+        height: "50px",
         offsetStart: "0px"
       }
     ],
@@ -75,8 +75,9 @@ async function handleMessage(info, source) {
       let params = querystring.stringify({
         part: 'snippet',
         key: api_key,
-        maxResults: 5,
-        q: keyword
+        maxResults: 10,
+        q: keyword,
+        type: 'video'
       });
       let link = api_url + '?' + params;
       let res = await fetch(link);
