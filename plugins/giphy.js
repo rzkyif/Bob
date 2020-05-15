@@ -6,7 +6,7 @@ const api_key = process.env.API_KEY_GIPHY;
 // handler information
 const command = 'giphy'; // command handler
 const alias = ['gif', 'g'];
-const syntax = 'giphy\n[search keyword]'
+const syntax = 'giphy\n(search keyword)'
 const description = 'Searches Giphy for a random gif related to the inputted keyword. Maximum keyword length is '+maxSearchKeyLength+' characters.';
 const admin = false;
 
@@ -28,7 +28,7 @@ async function handleMessage(info, source) {
       let data = json.data;
       let index = Math.floor(Math.random() * 26);
       let gif = data[index];
-      replies[0] = { type: 'image', originalContentUrl: gif.images.fixed_width.url, previewImageUrl: gif.images.fixed_width_downsampled.url }
+      replies[0] = { type: 'image', originalContentUrl: gif.images.fixed_width.url, previewImageUrl: gif.images.fixed_width.url }
     } catch (e) {
       if (e && e.message) {
         replies[0].text = e.message;

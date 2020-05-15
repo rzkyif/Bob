@@ -57,7 +57,7 @@ let bubbleTemplate = (thumbnailUrl, title, link) => (
 // handler information
 const command = 'youtube'; // command handler
 const alias = ['yt', 'y'];
-const syntax = 'youtube\n[search keyword]'
+const syntax = 'youtube\n(search keyword)'
 const description = 'Searches Youtube with the inputted keyword. Maximum keyword length is '+maxSearchKeyLength+' characters.';
 const admin = false;
 

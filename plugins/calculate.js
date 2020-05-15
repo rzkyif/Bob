@@ -4,7 +4,7 @@ const maxExpressionLength = 100;
 // handler information
 const command = 'calculate'; // command handler
 const alias = ['calc', 'hitung', 'c', 'mathjs', 'math'];
-const syntax = 'calculate\n[mathematical expression]'
+const syntax = 'calculate\n(mathematical expression)'
 const description = 'Attempts to solve the inputted mathematical expression with `MathJS`. Maximum expression length is '+maxExpressionLength+' characters.';
 const admin = false;
 
