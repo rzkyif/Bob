@@ -167,7 +167,7 @@ async function handleEvent(event) {
         } else {
           textReply = 'Command not found!'
         }
-        break;
+        break;  
     }
 
     if (textReply !== null && finalReply.length === 0) finalReply = [{ type: 'text', text: textReply }];
@@ -221,5 +221,5 @@ async function handleEvent(event) {
 reloadModules();
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
-  console.log(`Bob says hello fom port ${port}!`);
+  console.log(`Bob says hello from port ${port}!`);
 });
