@@ -18,6 +18,8 @@ const pluginDirectory = 'plugins'
 const client = new line.Client(config);
 const app = express();
 const commandPrefix = '.';
+const version = 1.4;
+const infoText = 'Bob Bot (Alpha) '+version+'\nby rzkyif\n\nAn extendable Line Bot that is built with a focus on modularity.\n\nPlease DO NOT SHARE this bot as it is currently not suitable for mass usage.\n\nIf there is any bug just deal with it lol.\n\nType .help to see available commands.';
 
 // variables
 let messageHandlers = []
@@ -66,8 +68,10 @@ function reloadModules() {
 // global event handle
 async function handleEvent(event) {
 
-  // only handle text messages
-  if (event.type !== 'message' || event.message.type !== 'text' ) {
+  // only handle text messages and join or follow events
+  if (event.type == 'join' || event.type == 'follow') {
+    return client.replyMessage(event.replyToken, { type: 'text', text: infoText });
+  } else if (event.type !== 'message' || event.message.type !== 'text' ) {
     return null;
   }
 
@@ -130,7 +134,7 @@ async function handleEvent(event) {
 
       // help command
       case 'help':
-        if (args) {
+        if (args && args.length > 0 && args[0] != 'help') {
           let plugin = commandHandlers[commandAliases[args[0]] || args[0]];
           if (plugin !== undefined) {
             textReply = "Syntax:\n" + commandPrefix + plugin.syntax;
@@ -140,12 +144,17 @@ async function handleEvent(event) {
             textReply = "Command not found!"
           }
         } else {
-          textReply = "Available commands:";
+          textReply = 'Type\n\n'+commandPrefix+'help\n(command name)\n\nto get instructions on how to use that command.'
+          textReply += "\n\nAvailable commands:";
           Object.keys(commandHandlers).forEach((key, index) => {
             let handler = commandHandlers[key];
             textReply += '\n'+(index+1)+': '+handler.command+' ('+handler.alias.join(', ')+')';
           });
         }
+        break;
+      
+      case 'about':
+        textReply = infoText;
         break;
 
       // all other commands

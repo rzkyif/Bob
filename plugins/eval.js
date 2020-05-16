@@ -1,7 +1,7 @@
 'use strict';
 
 // constants
-const codeTimeout = 100;
+const codeTimeout = 200;
 
 // handler information
 const command = 'evaluate'; // command handler

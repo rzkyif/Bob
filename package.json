@@ -1,6 +1,6 @@
 {
   "name": "bob",
-  "version": "1.0.0",
+  "version": "1.4",
   "description": "An extendable Line Bot that is built with a focus on modularity.",
   "main": "bob.js",
   "scripts": {
