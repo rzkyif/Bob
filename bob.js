@@ -18,8 +18,10 @@ const pluginDirectory = 'plugins'
 const client = new line.Client(config);
 const app = express();
 const commandPrefix = '.';
+const githubLink = 'https://github.com/rzkyif/Bob';
 const version = '1.4.2';
-const infoText = 'Bob Bot (Alpha) '+version+'\nby rzkyif\n\nAn extendable Line Bot that is built with a focus on modularity.\n\nPlease DO NOT SHARE this bot as it is currently not suitable for mass usage.\n\nIf there is any bug just deal with it lol.\n\nType .help to see available commands.';
+const infoTextShort = 'Bob Bot (Alpha) '+version+'\nby rzkyif';
+const infoText = infoTextShort+'\n\nAn extendable Line Bot that is built with a focus on modularity.\n\nPlease DO NOT SHARE this bot as it is currently not suitable for mass usage.\n\nIf there is any bug just deal with it lol.\n\nType .help to see available commands, type .about to see this message, and type .source to get a link to the source code.';
 
 // variables
 let messageHandlers = []
@@ -69,8 +71,10 @@ function reloadModules() {
 async function handleEvent(event) {
 
   // only handle text messages and join or follow events
-  if (event.type == 'join' || event.type == 'follow') {
+  if (event.type == 'follow') {
     return client.replyMessage(event.replyToken, { type: 'text', text: infoText });
+  } else if (event.type == 'join') {
+    return client.replyMessage(event.replyToken, { type: 'text', text: infoTextShort + '\n\nType .about or .help to get more information.' });
   } else if (event.type !== 'message' || event.message.type !== 'text' ) {
     return null;
   }
@@ -155,6 +159,10 @@ async function handleEvent(event) {
       
       case 'about':
         textReply = infoText;
+        break;
+      
+      case 'source':
+        textReply = 'Find the source code for this bot at Github:\n'+githubLink;
         break;
 
       // all other commands
