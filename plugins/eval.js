@@ -35,7 +35,7 @@ async function handle(info, source) {
       text = context.cout;
     }
   }
-  return { result: { type: 'text', text: text }, final: true };
+  return { result: { type: 'text', text: text } };
 }
 
 // exports setup

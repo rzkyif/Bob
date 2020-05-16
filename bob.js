@@ -131,11 +131,11 @@ async function handleEvent(event) {
       // help command
       case 'help':
         if (args) {
-          let i = commands[args[0]];
-          if (i !== undefined) {
-            textReply = "Syntax:\n" + commandPrefix + messageHandlers[i].syntax;
-            textReply += "\n\nDescription:\n" + messageHandlers[i].description;
-            textReply += "\n\nAlias:\n" + messageHandlers[i].alias.join(', ');
+          let plugin = commandHandlers[commandAliases[args[0]] || args[0]];
+          if (plugin !== undefined) {
+            textReply = "Syntax:\n" + commandPrefix + plugin.syntax;
+            textReply += "\n\nDescription:\n" + plugin.description;
+            textReply += "\n\nAlias:\n" + plugin.alias.join(', ');
           } else {
             textReply = "Command not found!"
           }
@@ -210,7 +210,7 @@ async function handleEvent(event) {
   }
 
   // return the final reply, either from command handler or message handlers
-  if (finalReply.length > 0) {
+  if ((Array.isArray(finalReply) && finalReply.length > 0) || (finalReply)) {
     return client.replyMessage(event.replyToken, finalReply);
   } else {
     return null;

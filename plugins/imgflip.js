@@ -48,7 +48,7 @@ async function handle(info, source) {
       } else {
         result = { type: 'text', text: json.error_message }
       }
-      
+
     } catch (e) {
       if (e && e.message) {
         result.text = e.message;
@@ -57,7 +57,7 @@ async function handle(info, source) {
       }
     }
   }
-  return { result: result, final: true };
+  return { result: result };
 }
 
 // exports setup

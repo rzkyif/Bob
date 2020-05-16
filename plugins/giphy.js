@@ -35,7 +35,7 @@ async function handle(info, source) {
       }
     }
   }
-  return { result: result, final: true };
+  return { result: result };
 }
 
 // exports setup

@@ -27,7 +27,7 @@ async function handle(info, source) {
       }
     }
   }
-  return { result: { type: 'text', text: text }, final: true };
+  return { result: { type: 'text', text: text } };
 }
 
 // exports setup

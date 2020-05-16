@@ -88,7 +88,7 @@ async function handle(info, source) {
       json.items.forEach((item) => {
         results.push(bubbleTemplate(item.snippet.thumbnails.high.url, item.snippet.title.slice(0,40), 'https://www.youtube.com/watch?v='+item.id.videoId));
       });
-      
+
       if (results.length > 0) {
         result = { type: 'flex', altText: 'Youtube search result.', contents: carouselTemplate(results) };
       } else {
@@ -102,7 +102,7 @@ async function handle(info, source) {
       }
     }
   }
-  return { result: result, final: true };
+  return { result: result };
 }
 
 // exports setup

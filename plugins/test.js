@@ -13,7 +13,7 @@ async function handle(info, source) {
   info.args.forEach((arg, i) => {
     text += '\n[' + i + ']\n"' + arg + '"';
   });
-  return { result: { type: 'text', text: text }, final: true };
+  return { result: { type: 'text', text: text } };
 }
 
 // exports setup
