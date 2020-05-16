@@ -108,7 +108,7 @@ async function handleEvent(event) {
       });
     }
 
-    const info = { command: command, args: args }
+    const info = { text: event.message.text, command: command, args: args }
 
     let textReply = null;
     switch (command) {
