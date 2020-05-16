@@ -141,7 +141,7 @@ async function handleEvent(event) {
           }
         } else {
           textReply = "Available commands:\n";
-          textReply += Object.keys(commands).join(', ');
+          textReply += commandHandlers.map((handler, index) => (index+1)+': '+handler.command+' ('+handler.alias.join(', ')+')').join('\n');
         }
         break;
 
@@ -160,7 +160,7 @@ async function handleEvent(event) {
                 });
                 finalReply = result.slice(0,5);
               } else {
-                finalReply = result;
+                finalReply = [result];
               }
             }
           }
@@ -170,7 +170,7 @@ async function handleEvent(event) {
         break;
     }
 
-    if (textReply && finalReply.length === 0) finalReply = [{ type: 'text', text: textReply }];
+    if (textReply !== null && finalReply.length === 0) finalReply = [{ type: 'text', text: textReply }];
   
   } else if (messageHandlers.length > 0) {
     // message handler calls
@@ -210,7 +210,7 @@ async function handleEvent(event) {
   }
 
   // return the final reply, either from command handler or message handlers
-  if ((Array.isArray(finalReply) && finalReply.length > 0) || (finalReply)) {
+  if (finalReply.length > 0) {
     return client.replyMessage(event.replyToken, finalReply);
   } else {
     return null;
@@ -221,5 +221,5 @@ async function handleEvent(event) {
 reloadModules();
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
-  console.log(`Bob is now alive on port ${port}.`);
+  console.log(`Bob says hello fom port ${port}!`);
 });
