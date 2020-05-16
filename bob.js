@@ -92,9 +92,8 @@ async function handleEvent(event) {
   }
 
   // start processing
-
   let finalReply = [];
-  if (input[0].startsWith(config.commandPrefix)) {
+  if (input[0].startsWith(commandPrefix)) {
     // command handler calls
     let command, args = null;
 
