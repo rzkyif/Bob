@@ -7,7 +7,7 @@ const codeTimeout = 200;
 const command = 'evaluate'; // command handler
 const alias = ['js', 'javascript', 'e', 'eval'];
 const syntax = 'evaluate\n(javascript code)';
-const description = 'A command that lets users compile and run simple Javascript code using `safe-eval`. Timeout happens after code runs for '+codeTimeout+'ms.';
+const description = 'A command that lets users compile and run simple Javascript code using `safe-eval`. Timeout happens after code runs for '+codeTimeout+'ms.\n\nThere are two special functions that can be used inside the script:\n1. print(x): to print x\n2. println(x): to print x and a newline';
 const admin = false;
 
 // library requirements

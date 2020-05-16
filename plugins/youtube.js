@@ -86,7 +86,7 @@ async function handle(info, source) {
 
       let json = await fetch(api_url + '?' + params, {timeout: timeout}).then(res => res.json());
 
-      results = []
+      let results = []
       json.items.forEach((item) => {
         results.push(bubbleTemplate(item.snippet.thumbnails.high.url, item.snippet.title.slice(0,40), 'https://www.youtube.com/watch?v='+item.id.videoId));
       });
