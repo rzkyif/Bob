@@ -4,7 +4,7 @@ const codeTimeout = 100;
 // handler information
 const command = 'evaluate'; // command handler
 const alias = ['js', 'javascript', 'e', 'eval'];
-const syntax = 'evaluate\n(javascript code)'
+const syntax = 'evaluate\n(javascript code)';
 const description = 'A command that lets users compile and run simple Javascript code using `safe-eval`. Timeout happens after code runs for '+codeTimeout+'ms.';
 const admin = false;
 

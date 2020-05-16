@@ -4,7 +4,7 @@ const maxExpressionLength = 100;
 // handler information
 const command = 'calculate'; // command handler
 const alias = ['calc', 'c', 'mathjs', 'math'];
-const syntax = 'calculate\n(mathematical expression)'
+const syntax = 'calculate\n(mathematical expression)';
 const description = 'A command that lets users solve mathematical expressions with `MathJS`. Maximum mathematical expression length is '+maxExpressionLength+' characters.';
 const admin = false;
 
@@ -15,7 +15,7 @@ const math = require('mathjs');
 async function handle(info, source) {
   let text;
   if (info.args.length < 1 || info.args.join('').length > maxExpressionLength) {
-    text = 'Type .help calculate for instructions.'
+    text = 'Type .help calculate for instructions.';
   } else {
     try {
       text = String(math.evaluate(info.args.join(' ')));

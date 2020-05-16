@@ -1,15 +1,15 @@
 // constants
 const maxTextLength = 50;
 const timeout = 1000;
-const api_url_get = 'https://api.imgflip.com/get_memes'
-const api_url_caption = 'https://api.imgflip.com/caption_image'
+const api_url_get = 'https://api.imgflip.com/get_memes';
+const api_url_caption = 'https://api.imgflip.com/caption_image';
 const api_password_imgflip = process.env.API_PASSWORD_IMGFLIP;
 const api_username_imgflip = process.env.API_USERNAME_IMGFLIP;
 
 // handler information
 const command = 'imgflip'; // command handler
 const alias = ['imgf', 'meme', 'm'];
-const syntax = 'imgflip\n(text1)\n[text2]\n[text3]\n[text4]\n[text5]'
+const syntax = 'imgflip\n(text1)\n[text2]\n[text3]\n[text4]\n[text5]';
 const description = 'A command that lets users create memes using Imgflip templates with the arguments as text. Maximum length for each text is '+maxTextLength+' characters.\n\nDisclaimer: Generated image will automatically be stored and be made publicly available in Bob\'s Imgflip account.';
 const admin = false;
 

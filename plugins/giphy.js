@@ -6,7 +6,7 @@ const api_key = process.env.API_KEY_GIPHY;
 // handler information
 const command = 'giphy'; // command handler
 const alias = ['gif', 'g'];
-const syntax = 'giphy\n(keyword)'
+const syntax = 'giphy\n(keyword)';
 const description = 'A command that lets users search Giphy for a random gif related to the keyword. Maximum keyword length is '+maxKeywordLength+' characters.';
 const admin = false;
 

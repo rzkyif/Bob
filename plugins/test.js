@@ -1,7 +1,7 @@
 // handler information
 const command = 'test'; // command handler
 const alias = ['t'];
-const syntax = 'test\n[argument(s)]'
+const syntax = 'test\n[argument(s)]';
 const description = 'Prints out the command and arguments that were inputted.';
 const admin = false;
 
@@ -9,7 +9,7 @@ const admin = false;
 async function handle(info, source) {
   let text;
   text = 'Command:\n' + info.command;
-  text += '\n\nArguments:'
+  text += '\n\nArguments:';
   info.args.forEach((arg, i) => {
     text += '\n[' + i + ']\n"' + arg + '"';
   });

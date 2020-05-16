@@ -1,13 +1,13 @@
 // constants
 const maxSearchKeyLength = 100;
 const timeout = 1000;
-const api_url = "https://www.googleapis.com/youtube/v3/search"
+const api_url = "https://www.googleapis.com/youtube/v3/search";
 const api_key = process.env.API_KEY_YOUTUBE;
 
 // handler information
 const command = 'youtube'; // command handler
 const alias = ['yt', 'y'];
-const syntax = 'youtube\n(search keyword)'
+const syntax = 'youtube\n(search keyword)';
 const description = 'Searches Youtube with the inputted keyword. Maximum keyword length is '+maxSearchKeyLength+' characters.';
 const admin = false;
 

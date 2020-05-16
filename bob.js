@@ -45,9 +45,8 @@ function reloadModules() {
   fs.readdirSync(pluginDirectory).forEach((file) => {
     let pluginPath = './' + path.join(pluginDirectory, file)
     let plugin = require(pluginPath);
-    delete require.cache[require.resolve(pluginPath)];
 
-    if (plugin.command) {
+    if (plugin.command !== undefined && plugin.command !== null) {
       commandHandlers[plugin.command] = plugin;
       plugin.alias.forEach((alias) => {
         commandAliases[alias] = plugin.command;
@@ -56,6 +55,7 @@ function reloadModules() {
       messageHandlers.push(plugin);
     }
 
+    delete require.cache[require.resolve(pluginPath)];
     index++;
   })
 
@@ -141,7 +141,7 @@ async function handleEvent(event) {
           }
         } else {
           textReply = "Available commands:";
-          commandHandlers.keys().forEach((key, index) => {
+          Object.keys(commandHandlers).forEach((key, index) => {
             let handler = commandHandlers[key];
             textReply += '\n'+(index+1)+': '+handler.command+' ('+handler.alias.join(', ')+')';
           });
