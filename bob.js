@@ -18,7 +18,7 @@ const pluginDirectory = 'plugins'
 const client = new line.Client(config);
 const app = express();
 const commandPrefix = '.';
-const version = 1.4;
+const version = '1.4.2';
 const infoText = 'Bob Bot (Alpha) '+version+'\nby rzkyif\n\nAn extendable Line Bot that is built with a focus on modularity.\n\nPlease DO NOT SHARE this bot as it is currently not suitable for mass usage.\n\nIf there is any bug just deal with it lol.\n\nType .help to see available commands.';
 
 // variables
