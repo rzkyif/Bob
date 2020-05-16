@@ -28,21 +28,13 @@ async function handle(info, source) {
       let templates = await fetch(api_url_get).then(res => res.json());
       let template_id = templates.data.memes[Math.floor(Math.random() * 101)].id;
 
-      let boxes = []
-      info.args.forEach(arg => {
-        boxes.push( { text: arg } );
-      });
-
       let body = new URLSearchParams();
       body.append('template_id', template_id);
       body.append('username', api_username_imgflip);
       body.append('password', api_password_imgflip);
-      body.append('text0', info.args);
-      if (info.args[1] !== undefined) body.append('text1', info.args[1]);
-      body.append('boxes', JSON.stringify(boxes));
-
-      console.log(body);
-      console.log(body.toString());
+      info.args.slice(0,5).forEach((arg, i) => {
+        body.append('boxes['+i+'][text]', arg)
+      });
 
       let json = await fetch(api_url_caption, { method: 'POST', body: body, timeout: timeout }).then(res => res.json());
       if (json.success === true) {
