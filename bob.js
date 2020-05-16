@@ -118,8 +118,8 @@ async function handleEvent(event) {
         }
         break;
 
-      // refresh command
-      case 'refresh':
+      // reload command
+      case 'reload':
         if (source.placeId || source.userId !== adminId) {
           textReply = 'You are not the administrator of this bot!';
         } else {
@@ -155,7 +155,7 @@ async function handleEvent(event) {
           if (plugin.admin && source.userId !== adminId) {
             textReply = 'You are not allowed to use this command!';
           } else {
-            let {result} = plugin.handle(info, source);
+            let {result, final, lock} = plugin.handle(info, source);
             if (result !== undefined) {
               if (Array.isArray(result)) {
                 result.forEach((reply) => {
@@ -165,6 +165,8 @@ async function handleEvent(event) {
               } else {
                 finalReply = [result];
               }
+            } else {
+              textReply = 'Command executed, but it didn\'t return anything.'; 
             }
           }
         } else {
