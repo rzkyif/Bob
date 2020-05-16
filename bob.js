@@ -72,7 +72,7 @@ async function handleEvent(event) {
   }
 
   // extract event information
-  let newline = event.message.text.indexOf('\n');
+  let newline = event.message.text.indexOf('\n'),
       space = event.message.text.indexOf(' ');
   let input;
   if (newline === -1 || (space !== -1 && space < newline)) {
