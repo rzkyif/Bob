@@ -14,7 +14,7 @@ const config = {
 };
 
 // constants
-const pluginDirectory = './plugins'
+const pluginDirectory = 'plugins'
 const client = new line.Client(config);
 const app = express();
 const commandPrefix = '.';
@@ -155,7 +155,7 @@ async function handleEvent(event) {
           if (plugin.admin && source.userId !== adminId) {
             textReply = 'You are not allowed to use this command!';
           } else {
-            let {result, final, lock} = plugin.handle(info, source);
+            let {result, final, lock} = await plugin.handle(info, source);
             if (result !== undefined) {
               if (Array.isArray(result)) {
                 result.forEach((reply) => {
@@ -187,7 +187,7 @@ async function handleEvent(event) {
         continue;
       }
 
-      let {result, final, lock} = messageHandlers[index].handle(info, source);
+      let {result, final, lock} = await messageHandlers[index].handle(info, source);
 
       if (result !== undefined) {
         if (Array.isArray(result) && finalReply.length + result.length <= 5) {

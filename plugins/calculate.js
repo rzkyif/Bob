@@ -1,3 +1,5 @@
+'use strict';
+
 // constants
 const maxExpressionLength = 100;
 

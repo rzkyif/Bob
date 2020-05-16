@@ -1,3 +1,5 @@
+'use strict';
+
 // constants
 const maxSearchKeyLength = 100;
 const timeout = 1000;

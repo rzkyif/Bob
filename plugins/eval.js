@@ -1,3 +1,5 @@
+'use strict';
+
 // constants
 const codeTimeout = 100;
 

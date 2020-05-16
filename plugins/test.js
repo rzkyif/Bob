@@ -1,3 +1,5 @@
+'use strict';
+
 // handler information
 const command = 'test'; // command handler
 const alias = ['t'];

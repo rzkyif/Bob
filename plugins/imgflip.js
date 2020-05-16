@@ -1,3 +1,5 @@
+'use strict';
+
 // constants
 const maxTextLength = 50;
 const timeout = 1000;
