@@ -140,8 +140,11 @@ async function handleEvent(event) {
             textReply = "Command not found!"
           }
         } else {
-          textReply = "Available commands:\n";
-          textReply += commandHandlers.map((handler, index) => (index+1)+': '+handler.command+' ('+handler.alias.join(', ')+')').join('\n');
+          textReply = "Available commands:";
+          commandHandlers.keys().forEach((key, index) => {
+            let handler = commandHandlers[key];
+            textReply += '\n'+(index+1)+': '+handler.command+' ('+handler.alias.join(', ')+')';
+          });
         }
         break;
 
