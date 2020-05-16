@@ -3,17 +3,17 @@ const maxExpressionLength = 100;
 
 // handler information
 const command = 'calculate'; // command handler
-const alias = ['calc', 'hitung', 'c', 'mathjs', 'math'];
+const alias = ['calc', 'c', 'mathjs', 'math'];
 const syntax = 'calculate\n(mathematical expression)'
-const description = 'Attempts to solve the inputted mathematical expression with `MathJS`. Maximum expression length is '+maxExpressionLength+' characters.';
+const description = 'A command that lets users solve mathematical expressions with `MathJS`. Maximum mathematical expression length is '+maxExpressionLength+' characters.';
 const admin = false;
 
 // library requirements
 const math = require('mathjs');
 
 // handler function
-async function handleMessage(info, source) {
-  var text = 'Mathematical evaluation failed!';
+async function handle(info, source) {
+  let text;
   if (info.args.length < 1 || info.args.join('').length > maxExpressionLength) {
     text = 'Type .help calculate for instructions.'
   } else {
@@ -27,12 +27,11 @@ async function handleMessage(info, source) {
       }
     }
   }
-  const replies = [{ type: 'text', text: text }];
-  return { replies: replies, final: true };
+  return { result: { type: 'text', text: text }, final: true };
 }
 
 // exports setup
-exports.handleMessage = handleMessage;
+exports.handle = handle;
 exports.command = command;
 exports.alias = alias;
 exports.syntax = syntax;

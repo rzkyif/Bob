@@ -5,19 +5,19 @@ const codeTimeout = 100;
 const command = 'evaluate'; // command handler
 const alias = ['js', 'javascript', 'e', 'eval'];
 const syntax = 'evaluate\n(javascript code)'
-const description = 'Compiles the inputted Javascript code with `safe-eval` and displays the returned value. Timeout after code runs for '+codeTimeout+'ms.';
+const description = 'A command that lets users compile and run simple Javascript code using `safe-eval`. Timeout happens after code runs for '+codeTimeout+'ms.';
 const admin = false;
 
 // library requirements
 const safeEval = require('safe-eval');
 
 // handler function
-async function handleMessage(info, source) {
-  var text = 'Code evaluation failed!';
+async function handle(info, source) {
+  let text;
   if (info.args.length < 1) {
     text = 'Type .help evaluate for instructions.'
   } else {
-    var context = {
+    let context = {
       cout: null, 
       print: (x) => {if (context.cout) {context.cout += String(x);} else {context.cout = String(x);}},
       println: (x) => context.print(String(x) + '\n')
@@ -35,12 +35,11 @@ async function handleMessage(info, source) {
       text = context.cout;
     }
   }
-  const replies = [{ type: 'text', text: text }];
-  return { replies: replies, final: true };
+  return { result: { type: 'text', text: text }, final: true };
 }
 
 // exports setup
-exports.handleMessage = handleMessage;
+exports.handle = handle;
 exports.command = command;
 exports.alias = alias;
 exports.syntax = syntax;

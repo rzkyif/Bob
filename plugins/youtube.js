@@ -3,6 +3,19 @@ const maxSearchKeyLength = 100;
 const timeout = 1000;
 const api_url = "https://www.googleapis.com/youtube/v3/search"
 const api_key = process.env.API_KEY_YOUTUBE;
+
+// handler information
+const command = 'youtube'; // command handler
+const alias = ['yt', 'y'];
+const syntax = 'youtube\n(search keyword)'
+const description = 'Searches Youtube with the inputted keyword. Maximum keyword length is '+maxSearchKeyLength+' characters.';
+const admin = false;
+
+// library requirements
+const querystring = require('querystring');
+const fetch = require('node-fetch');
+
+// templates
 let carouselTemplate = (contents) => ({
   type: "carousel",
   contents: contents
@@ -53,24 +66,12 @@ let bubbleTemplate = (thumbnailUrl, title, link) => (
   }
 });
 
-
-// handler information
-const command = 'youtube'; // command handler
-const alias = ['yt', 'y'];
-const syntax = 'youtube\n(search keyword)'
-const description = 'Searches Youtube with the inputted keyword. Maximum keyword length is '+maxSearchKeyLength+' characters.';
-const admin = false;
-
-// library requirements
-const querystring = require('querystring');
-const fetch = require('node-fetch');
-
 // handler function
-async function handleMessage(info, source) {
-  var replies = [{ type: 'text', text: 'No result!' }];
+async function handle(info, source) {
+  var result = { type: 'text', text: 'No result!' };
   var keyword = info.args.join(' ');
   if (info.args.length < 1 || keyword.length > maxSearchKeyLength) {
-    replies[0].text = 'Type .help youtube for instructions.'
+    result.text = 'Type .help youtube for instructions.'
   } else {
     try {
       let params = querystring.stringify({
@@ -80,32 +81,32 @@ async function handleMessage(info, source) {
         q: keyword,
         type: 'video'
       });
-      let link = api_url + '?' + params;
-      let res = await fetch(link, {timeout: timeout});
-      let json = await res.json();
-      let items = json.items;
+
+      let json = await fetch(api_url + '?' + params, {timeout: timeout}).then(res => res.json());
+
       results = []
-      items.forEach((item) => {
+      json.items.forEach((item) => {
         results.push(bubbleTemplate(item.snippet.thumbnails.high.url, item.snippet.title.slice(0,40), 'https://www.youtube.com/watch?v='+item.id.videoId));
       });
+      
       if (results.length > 0) {
-        replies[0] = { type: 'flex', altText: 'Youtube search result.', contents: carouselTemplate(results) };
+        result = { type: 'flex', altText: 'Youtube search result.', contents: carouselTemplate(results) };
       } else {
-        replies[0].text = 'No result!';
+        result.text = 'No result!';
       }
     } catch (e) {
       if (e && e.message) {
-        replies[0].text = e.message;
+        result.text = e.message;
       } else {
-        replies[0].text = 'No result!';
+        result.text = 'No result!';
       }
     }
   }
-  return { replies: replies, final: true };
+  return { result: result, final: true };
 }
 
 // exports setup
-exports.handleMessage = handleMessage;
+exports.handle = handle;
 exports.command = command;
 exports.alias = alias;
 exports.syntax = syntax;

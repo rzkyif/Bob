@@ -6,18 +6,18 @@ const description = 'Prints out the command and arguments that were inputted.';
 const admin = false;
 
 // handler function
-async function handleMessage(info, source) {
-  let text = 'Command:\n' + info.command;
-  text += '\nArguments:'
+async function handle(info, source) {
+  let text;
+  text = 'Command:\n' + info.command;
+  text += '\n\nArguments:'
   info.args.forEach((arg, i) => {
     text += '\n[' + i + ']\n"' + arg + '"';
   });
-  const replies = [{ type: 'text', text: text }];
-  return { replies: replies, final: true };
+  return { result: { type: 'text', text: text }, final: true };
 }
 
 // exports setup
-exports.handleMessage = handleMessage;
+exports.handle = handle;
 exports.command = command;
 exports.alias = alias;
 exports.syntax = syntax;

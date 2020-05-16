@@ -10,18 +10,19 @@ const express = require('express');
 const config = {
   channelAccessToken: process.env.CHANNEL_ACCESS_TOKEN,
   channelSecret: process.env.CHANNEL_SECRET,
-  adminPassword: process.env.ADMIN_PASSWORD,
-  pluginDirectory: './plugins'
+  adminPassword: process.env.ADMIN_PASSWORD
 };
 
 // constants
+const pluginDirectory = './plugins'
 const client = new line.Client(config);
 const app = express();
 const commandPrefix = '.';
 
 // variables
 let messageHandlers = []
-let commands = {}
+let commandHandlers = {}
+let commandAliases = {}
 let locks = {}
 let adminId = ''
 
@@ -38,28 +39,29 @@ app.post('/callback', line.middleware(config), (req, res) => {
 
 // module loading function definition and call
 function reloadModules() {
-
   console.log('Reloading modules...');
 
-  let i = 0;
-  let files = fs.readdirSync(config.pluginDirectory).forEach((file) => {
-    let pluginPath = './' + path.join(config.pluginDirectory, file);
+  let index = 0;
+  fs.readdirSync(pluginDirectory).forEach((file) => {
+    let pluginPath = './' + path.join(pluginDirectory, file)
     let plugin = require(pluginPath);
-    messageHandlers.push(plugin);
-    if (plugin.command) {
-      commands[plugin.command] = i;
-      plugin.alias.forEach((alias) => {
-        commands[alias] = i;
-      });
-    }
-    i++;
     delete require.cache[require.resolve(pluginPath)];
+
+    if (plugin.command) {
+      commandHandlers[plugin.command] = plugin;
+      plugin.alias.forEach((alias) => {
+        commandAliases[alias] = plugin.command;
+      })
+    } else {
+      messageHandlers.push(plugin);
+    }
+
+    index++;
   })
 
   console.log('Module reload successful!');
 
 }
-reloadModules();
 
 // global event handle
 async function handleEvent(event) {
@@ -70,20 +72,13 @@ async function handleEvent(event) {
   }
 
   // extract event information
-  let input;
   let newline = event.message.text.indexOf('\n');
-  let space = event.message.text.indexOf(' ');
+      space = event.message.text.indexOf(' ');
+  let input;
   if (newline === -1 || (space !== -1 && space < newline)) {
     input = event.message.text.match(/(?:[^ \n\t'`"]+|`[^`]*`|'[^']*'|"[^"]*")+/g);
   } else {
     input = event.message.text.match(/(?:[^\n\t'`"]+|`[^`]*`|'[^']*'|"[^"]*")+/g); 
-  }
-  const command = input[0].slice(commandPrefix.length).toLowerCase();
-  let args = null;
-  if (input.length > 1) {
-    args = input.slice(1).map((arg) => {
-      return arg.replace(/(^["'`]|["'`]$)/g, '');
-    });
   }
   const source = { 
     type: event.source.type, 
@@ -91,107 +86,131 @@ async function handleEvent(event) {
     userId: event.source.userId 
   };
 
+  // only handle input with processable content
+  if (input.length == 0) {
+    return null;
+  }
+
   // start processing
+
   let finalReply = [];
-  if (input[0].startsWith(commandPrefix) && command === 'op') {
-    // op command, to register admin
-    let reply;
-    if (source.placeId || !args || args[0] !== config.adminPassword) {
-      reply = 'Wrong password!';
-    } else {
-      adminId = source.userId;
-      reply = 'New admin registered!';
-    }
-    finalReply = [{ type: 'text', text: reply }];
-  } else if (input[0].startsWith(commandPrefix) && command === 'refresh') {
-    // refresh command, to reload modules
-    let reply;
-    if (source.placeId || source.userId !== adminId) {
-      reply = 'You are not the administrator of this bot!';
-    } else {
-      reloadModules();
-      reply = 'Modules reloaded!';
-    }
-    finalReply = [{ type: 'text', text: reply }];
-  } else if (input[0].startsWith(commandPrefix) && command === 'help') {
-    // help function, to check documentation
-    let reply;
-    if (args) {
-      let i = commands[args[0]];
-      if (i !== undefined) {
-        reply = "Syntax:\n" + commandPrefix + messageHandlers[i].syntax;
-        reply += "\n\nDescription:\n" + messageHandlers[i].description;
-        reply += "\n\nAlias:\n" + messageHandlers[i].alias.join(', ');
-      } else {
-        reply = "Command not found!"
-      }
-    } else {
-      reply = "Available commands:\n";
-      reply += Object.keys(commands).join(', ');
-    }
-    finalReply = [{ type: 'text', text: reply }];
-  } else {
-    // everything else goes here
-    for (let i = 0; i < messageHandlers.length; i++) {
+  if (input[0].startsWith(config.commandPrefix)) {
+    // command handler calls
+    let command, args = null;
 
-      // pass message only to proper handlers
-      if (messageHandlers[i].command) {
-        if (!input[0].startsWith('.')) {
-          // skip if handler is a command handler but its not a command
-          continue;
+    command = input[0].slice(commandPrefix.length).toLowerCase();
+    if (input.length > 1) {
+      args = input.slice(1).map((arg) => {
+        return arg.replace(/(^["'`]|["'`]$)/g, '');
+      });
+    }
+
+    const info = { command: command, args: args }
+
+    let textReply = null;
+    switch (command) {
+      // op command
+      case 'op':
+        if (source.placeId || !args || args[0] !== config.adminPassword) {
+          textReply = 'Wrong password!';
+        } else {
+          adminId = source.userId;
+          textReply = 'New admin registered!';
         }
-        if (command !== messageHandlers[i].command) {
-          if (messageHandlers[i].alias) {
-            if (!messageHandlers[i].alias.includes(command)) {
-              // skip if wrong command and has alias but command is not alias
-              continue
-            }
+        break;
+
+      // refresh command
+      case 'refresh':
+        if (source.placeId || source.userId !== adminId) {
+          textReply = 'You are not the administrator of this bot!';
+        } else {
+          reloadModules();
+          textReply = 'Modules reloaded!';
+        }
+        break;
+
+      // help command
+      case 'help':
+        if (args) {
+          let i = commands[args[0]];
+          if (i !== undefined) {
+            textReply = "Syntax:\n" + commandPrefix + messageHandlers[i].syntax;
+            textReply += "\n\nDescription:\n" + messageHandlers[i].description;
+            textReply += "\n\nAlias:\n" + messageHandlers[i].alias.join(', ');
           } else {
-            // skip if wrong command and no alias
-            continue;
+            textReply = "Command not found!"
           }
+        } else {
+          textReply = "Available commands:\n";
+          textReply += Object.keys(commands).join(', ');
         }
-      }
-      if (messageHandlers[i].admin && source.userId !== adminId) {
-        // skip if handler is admin only and user is not admin
-        continue;
-      }
-      if (source.userId in locks && i != locks[source.userId]) {
-        // skip if user is locked on a handler and this is not the handler
+        break;
+
+      // all other commands
+      default:
+        let plugin = commandHandlers[commandAliases[command] || command];
+        if (plugin !== undefined) {
+          if (plugin.admin && source.userId !== adminId) {
+            textReply = 'You are not allowed to use this command!';
+          } else {
+            let {result} = plugin.handle(info, source);
+            if (result !== undefined) {
+              if (Array.isArray(result)) {
+                result.forEach((reply) => {
+                  if (reply.text && reply.text.length > 3000) reply.text = reply.text.slice(0, 3000);
+                });
+                finalReply = result.slice(0,5);
+              } else {
+                finalReply = result;
+              }
+            }
+          }
+        } else {
+          textReply = 'Command not found!'
+        }
+        break;
+    }
+
+    if (textReply && finalReply.length === 0) finalReply = [{ type: 'text', text: textReply }];
+  
+  } else if (messageHandlers.length > 0) {
+    // message handler calls
+    const info = { text: event.message.text };
+
+    for (let index = 0; index < messageHandlers.length; index++) {
+      // loop all message handlers
+      if ((locks[source.userId] && locks[source.userId] !== index) || (messageHandlers[index].admin && source.userId !== adminId)) {
         continue;
       }
 
-      // ready info for passing according to handler type
-      let info;
-      if (messageHandlers[i].command) {
-        info = { command: command, args: args };
-      } else {
-        info = { text: event.message.text };
+      let {result, final, lock} = messageHandlers[index].handle(info, source);
+
+      if (result !== undefined) {
+        if (Array.isArray(result) && finalReply.length + result.length <= 5) {
+          result.forEach((reply) => {
+            if (reply.text && reply.text.length > 3000) reply.text = reply.text.slice(0, 3000);
+          });
+          finalReply.push(...result);
+        } else if (finalReply.length < 5) {
+          finalReply.push(result);
+        }
       }
-      info.time = event.timestamp;
-      
-      // process with handler
-      var {replies, final, lock} = await messageHandlers[i].handleMessage(info, source);
+
       if (lock !== undefined) {
         if (lock === true) {
-          locks[source.userId] = i;
-        } else {
+          locks[source.userId] = index;
+        } else if (locks[source.userId] === index) {
           delete locks[source.userId];
         }
       }
-      if (replies && replies.length + finalReply.length < 5) {
-        replies.forEach((reply) => {
-          if (reply.text && reply.text.length > 3000) reply.text = reply.text.slice(0, 3000);
-        });
-        finalReply.push(...replies);
-      }
-      if (final || finalReply.length >= 5) {
+
+      if (final || finalReply.length === 5) {
         break;
       }
     }
   }
 
-  // return the final reply
+  // return the final reply, either from command handler or message handlers
   if (finalReply.length > 0) {
     return client.replyMessage(event.replyToken, finalReply);
   } else {
@@ -199,6 +218,8 @@ async function handleEvent(event) {
   }
 }
 
+// main code
+reloadModules();
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`Bob is now alive on port ${port}.`);
