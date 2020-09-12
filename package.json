@@ -11,7 +11,7 @@
     "express": "^4.17.1",
     "giphy-api": "^2.0.1",
     "mathjs": "^7.0.0",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^2.6.1",
     "safe-eval": "^0.4.1"
   }
 }
